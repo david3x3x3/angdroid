@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Angband</string>
+    <string name="version">0.0.0.1</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_quit">Quit</string>
+    <string name="angband_help">Angband Help</string>
+    <string name="preferences">Preferences</string>
+    <string name="interface1">Interface</string>
+    <string name="description">Angband is a dungeon-crawling roguelike RPG game.</string>
+    <string name="preferences_vibrate_title">Vibrate</string>
+    <string name="preferences_vibrate_summary">Enable or disable vibration in game</string>
+    <string name="preferences_fullscreen_title">Full screen</string>
+    <string name="preferences_fullscreen_summary">Enable or disable game in full screen</string>
+</resources>
