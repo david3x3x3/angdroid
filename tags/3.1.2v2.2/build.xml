@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Angband" default="angband-debug">
+
+    <!-- Please don't edit this file. Edit build.properties instead of -->
+
+    <!--
+    <property environment="env"/>
+
+    <property name="ndk-location" value="${env.ANDROID_NDK_ROOT}" />
+    <property name="sdk-location" value="${env.ANDROID_HOME}" />
+    -->
+    <property file="local.properties"/>
+    <property file="build.properties"/>
+    <property file="default.properties"/>
+
+    <path id="android.antlibs">
+        <pathelement path="${sdk-location}/tools/lib/anttasks.jar" />
+        <pathelement path="${sdk-location}/tools/lib/sdklib.jar" />
+        <pathelement path="${sdk-location}/tools/lib/androidprefs.jar" />
+        <pathelement path="${sdk-location}/tools/lib/apkbuilder.jar" />
+        <pathelement path="${sdk-location}/tools/lib/jarutils.jar" />
+    </path>
+
+    <taskdef name="setup"
+        classname="com.android.ant.SetupTask"
+        classpathref="android.antlibs"/>
+
+    <setup/>
+
+    <condition property="is.exist.jni.header">
+        <available file="angdroid.h" type="file" filepath="jni"/>
+    </condition>
+
+    <target name="angband-javah" depends="compile" unless="is.exist.jni.header">
+        <javah outputFile="jni/angdroid.h"
+            classpath="${out-classes-location}"
+            bootclasspath="${android-jar}"
+            verbose="true">
+            <class name="org.angdroid.angband.TermView" />
+            <class name="org.angdroid.angband.AngbandActivity" />
+        </javah>
+    </target>
+
+    <target name="angband-lib" depends="angband-javah">
+        <exec executable="${ndk-location}/ndk-build" failonerror="true">
+	</exec>
+    </target>
+
+    <target name="loader-lib" depends="angband-javah">
+        <exec executable="${ndk-location}/ndk-build" 
+	      failonerror="true"
+	      dir="loader">
+	</exec>
+	<copy file="loader/libs/armeabi/libloader.so" 
+	      tofile="libs/armeabi/libloader.so"
+	      overwrite="true"/>
+    </target>
+
+    <condition property="is.created.zip.resource">
+            <available file="zip" type="file" filepath="${resource-folder}/raw/"/>
+    </condition>
+
+    <target name="angband-resources" unless="is.created.zip.resource">
+        <zip destfile="${resource-folder}/raw/zip" basedir="../../lib"
+            excludes="**/Makefile **/*.glade **/*.fon **/*.bmp **/*.png **/*.wav xtra/sound/sound.cfg xtra/font/copying.txt"
+             />
+    </target>
+
+    <target name="clean">
+        <delete dir="bin"/>
+        <delete dir="gen"/>
+        <delete dir="libs/armeabi"/>
+        <delete dir="obj"/>
+        <delete dir="loader/obj"/>
+        <delete dir="loader/libs"/>
+        <delete file="${resource-folder}/raw/zip"/>
+	<delete file="jni/angdroid.h"/>
+    </target>
+
+    <target name="obfuscate" depends="angband-release">
+	<proguard>
+	    -libraryjars ${android.jar}: ${external-libs-folder}
+	    -injars      ${out-classes-location}
+	    -outjars     ${obfuscate-location}/classes.min.jar
+	    -keep public class * extends android.app.Activity
+	    -optimizations !code/simplification/cast
+       </proguard>
+    </target>
+    
+    <target name="angband-release" depends="angband-resources, angband-lib, loader-lib, release" />
+    <target name="angband-debug" depends="angband-resources, angband-lib, loader-lib, debug" />
+
+</project>
