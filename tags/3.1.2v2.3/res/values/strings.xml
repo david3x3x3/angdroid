@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Angband</string>
+    <string name="version">0.0.0.1</string>
+
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_profiles">Profiles</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_quit">Quit</string>
+
+    <string name="menu_profile_add">Edit Profile</string>
+
+    <string name="angband_help">Angband Help</string>
+    <string name="preferences">Preferences</string>
+    <string name="profiles">Profiles</string>
+    <string name="profileadd">New Profile</string>
+
+    <string name="profile_name_caption">Name or description of profile</string>
+    <string name="profile_savefile_caption">Filename for saved game</string>
+
+    <string name="interface_category">Interface</string>
+    <string name="game_category">Game</string>
+    <string name="description">Angband is a dungeon-crawling roguelike RPG game.</string>
+    <string name="preferences_vibrate_title">Vibrate</string>
+    <string name="preferences_vibrate_summary">Enable or disable vibration in game</string>
+    <string name="preferences_fullscreen_title">Full screen</string>
+    <string name="preferences_fullscreen_summary">Enable or disable game in full screen</string>
+    <string name="preferences_gameplugin_title">Selected variant</string>
+    <string name="preferences_gameplugin_summary">Select Angband variant to play</string>
+    <string name="preferences_enabletouch_title">Enable touchscreen input</string>
+    <string name="preferences_enabletouch_summary">Turn on touchscreen input controls.</string>
+    <string name="preferences_alwaysrun_title">Always run</string>
+    <string name="preferences_alwaysrun_summary">Always run when using touch directional commands</string>
+
+    <string name="preferences_skipwelcome_title">Skip welcome screen</string>
+    <string name="preferences_skipwelcome_summary">Automatically skip the Angband welcome screen that displays at startup.</string>
+
+    <string name="preferences_autostartborg_title">Auto-start borg</string>
+    <string name="preferences_autostartborg_summary">Automatically starts your borg (Vanilla 3.0.6 only)</string>
+
+	<!-- todo move plugin manifest onto sdcard -->
+    <string-array name="gamePluginDescriptions">
+      <item>Vanilla 3.1.2v2</item>
+      <item>Vanilla 3.0.6 squelch+borg</item>
+      <!-- <item>ToME 2.5.3</item> -->
+    </string-array>
+    <string-array name="gamePluginNames">
+      <item>angband</item>
+      <item>angband306</item>
+      <!-- <item>tome</item> -->
+    </string-array>
+    <string-array name="gamePlugins">
+      <item>0</item>
+      <item>1</item>
+      <!-- <item>2</item> -->
+    </string-array>
+</resources>

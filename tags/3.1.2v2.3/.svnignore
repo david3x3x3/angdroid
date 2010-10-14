@@ -1,0 +1,7 @@
+build.properties
+.classpath
+.project
+bin
+jni/angdroid.h
+res/raw/zip
+gen
