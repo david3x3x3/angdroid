@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/display_category">
+		<CheckBoxPreference 
+			android:key="angband.vibrate"
+			android:defaultValue="false" 
+			android:title="@string/preferences_vibrate_title"
+			android:summary="@string/preferences_vibrate_summary" />
+		<CheckBoxPreference 
+			android:key="angband.fullscreen"
+			android:defaultValue="true" 
+			android:title="@string/preferences_fullscreen_title"
+			android:summary="@string/preferences_fullscreen_summary" />
+		<ListPreference 
+			android:key="angband.orientation"
+			android:defaultValue="0" 
+			android:title="@string/preferences_orientation_title"
+			android:summary="@string/preferences_orientation_summary" 
+		    android:entries="@array/orientationDescriptions"
+		    android:entryValues="@array/orientations" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/control_category">
+	  <CheckBoxPreference 
+		 android:key="angband.portraitkb"
+		 android:title="@string/preferences_portraitkb_title"
+		 android:summary="@string/preferences_portraitkb_summary"
+		 android:defaultValue="true"/>
+	  <CheckBoxPreference 
+		 android:key="angband.landscapekb"
+		 android:title="@string/preferences_landscapekb_title"
+		 android:summary="@string/preferences_landscapekb_summary"
+		 android:defaultValue="false"/>
+	  <CheckBoxPreference 
+		 android:key="angband.enabletouch"
+		 android:defaultValue="true" 
+		 android:title="@string/preferences_enabletouch_title"
+		 android:summary="@string/preferences_enabletouch_summary" />
+	  <CheckBoxPreference 
+		 android:key="angband.alwaysrun"
+		 android:defaultValue="true" 
+		 android:title="@string/preferences_alwaysrun_title"
+		 android:summary="@string/preferences_alwaysrun_summary" 
+		 android:dependency="angband.enabletouch" />
+	  <CheckBoxPreference 
+		 android:key="angband.enablevolkeyfontsize"
+		 android:defaultValue="true" 
+		 android:title="@string/preferences_enablevolkeyfontsize_title"
+		 android:summary="@string/preferences_enablevolkeyfontsize_summary" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/game_category">
+		<org.angdroid.angband.ProfileListPreference 
+				android:title="@string/preferences_gameplugin_title"
+				android:key="angband.gameplugin"
+				android:summary="@string/preferences_gameplugin_summary"
+				android:entries="@array/gamePluginDescriptions"
+				android:entryValues="@array/gamePlugins" />
+		<org.angdroid.angband.ProfileCheckBoxPreference 
+				android:title="@string/preferences_skipwelcome_title"
+				android:key="angband.skipwelcome"
+				android:defaultValue="false" 
+				android:summary="@string/preferences_skipwelcome_summary" />
+		<org.angdroid.angband.ProfileCheckBoxPreference 
+				android:title="@string/preferences_autostartborg_title"
+				android:key="angband.autostartborg"
+				android:defaultValue="false" 
+				android:summary="@string/preferences_autostartborg_summary" />
+	</PreferenceCategory>
+</PreferenceScreen>
