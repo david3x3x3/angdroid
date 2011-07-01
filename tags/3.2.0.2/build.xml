@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Angband" default="angband-debug">
+
+    <property file="local.properties"/>
+    <property file="build.properties"/>
+    <property file="default.properties"/>
+
+    <target name="angband-debug" depends="angband-debug-override">
+	  <ant inheritAll="true" dir="." antfile="build-angband.xml" target="angband-debug" />
+    </target>
+    <target name="angband-beta" depends="angband-debug-override">
+	  <ant inheritAll="true" dir="." antfile="build-angband.xml" target="angband-release" />
+    </target>
+    <target name="angband-release" depends="angband-release-override">
+	  <ant inheritAll="true" dir="." antfile="build-angband.xml" target="angband-release" />
+    </target>
+    <target name="angband-plugin-src">
+	  <ant inheritAll="true" dir="." antfile="build-angband.xml" target="plugin-src" />
+    </target>
+
+    <target name="nightly-beta" depends="nightly-copy,nightly-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/nightly" antfile="build-nightly.xml" target="nightly-release" />
+    </target>
+    <target name="nightly-debug" depends="nightly-copy,nightly-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/nightly" antfile="build-nightly.xml" target="nightly-debug" />
+    </target>
+    <target name="nightly-plugin-src" depends="nightly-copy,nightly-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/nightly" antfile="build-nightly.xml" target="plugin-src" />
+    </target>
+
+    <target name="classics-beta" depends="classics-copy,classics-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/classics" antfile="build-classics.xml" target="classics-release" />
+    </target>
+    <target name="classics-debug" depends="classics-copy,classics-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/classics" antfile="build-classics.xml" target="classics-debug" />
+    </target>
+    <target name="classics-release" depends="classics-copy,classics-release-override">
+	  <ant inheritAll="true" dir="./alt-apk/classics" antfile="build-classics.xml" target="classics-release" />
+    </target>
+    <target name="classics-plugin-src" depends="classics-copy,classics-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/classics" antfile="build-classics.xml" target="plugin-src" />
+    </target>
+
+    <target name="variants-debug" depends="variants-copy,variants-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/variants" antfile="build-variants.xml" target="variants-debug" />
+    </target>
+    <target name="variants-beta" depends="variants-copy,variants-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/variants" antfile="build-variants.xml" target="variants-release" />
+    </target>
+    <target name="variants-release" depends="variants-copy,variants-release-override">
+	  <ant inheritAll="true" dir="./alt-apk/variants" antfile="build-variants.xml" target="variants-release" />
+    </target>
+    <target name="variants-plugin-src" depends="variants-copy,variants-debug-override">
+	  <ant inheritAll="true" dir="./alt-apk/variants" antfile="build-variants.xml" target="plugin-src" />
+    </target>
+
+	<target name="variants-copy">
+	  <copy todir="./alt-apk/variants">
+		<fileset dir=".">
+		  <exclude name="**/alt-apk/**" />
+		  <exclude name="**/bin/**" />
+		  <exclude name="**/gen/**" />
+		  <exclude name="**/libs/armeabi/**" />
+		  <exclude name="**/override/**" />
+		  <exclude name="**/plugin/angband/**" />
+		  <exclude name="**/plugin/angband306/**" />
+		  <exclude name="**/plugin/frogknows/**" />
+		  <exclude name="**/plugin/moria/**" />
+		  <exclude name="**/plugin/rogue/**" />
+		  <exclude name="**/plugin/larn/**" />
+		  <exclude name="**/plugin/nightly/**" />
+		  <exclude name="**/plugin/include/*.h" />
+		  <exclude name="**/plugin/loader/libs/**" />
+		  <exclude name="**/plugin/loader/obj/**" />
+		  <exclude name="**/res/raw/**" />
+		</fileset>
+	  </copy>
+	  <exec dir="./alt-apk/variants" executable="${bash-location}">
+		<arg value="fix-variants.sh"/>
+	  </exec>
+	  <delete> 
+		<fileset dir="./alt-apk/variants" defaultexcludes="false">
+		  <include name="**/*~"/>		  
+		</fileset>
+	  </delete>
+	  <copy todir="./alt-apk/variants" overwrite="true">
+		<fileset dir="./alt-apk/override/variants" />
+	  </copy>
+    </target>
+
+
+	<target name="nightly-copy">
+	  <copy todir="./alt-apk/nightly">
+		<fileset dir=".">
+		  <exclude name="**/alt-apk/**" />
+		  <exclude name="**/bin/**" />
+		  <exclude name="**/gen/**" />
+		  <exclude name="**/libs/armeabi/**" />
+		  <exclude name="**/override/**" />
+		  <exclude name="**/plugin/tome/**" />
+		  <exclude name="**/plugin/steam/**" />
+		  <exclude name="**/plugin/sang/**" />
+		  <exclude name="**/plugin/npp/**" />
+		  <exclude name="**/plugin/angband/**" />
+		  <exclude name="**/plugin/angband306/**" />
+		  <exclude name="**/plugin/frogknows/**" />
+		  <exclude name="**/plugin/moria/**" />
+		  <exclude name="**/plugin/rogue/**" />
+		  <exclude name="**/plugin/larn/**" />
+		  <exclude name="**/plugin/include/*.h" />
+		  <exclude name="**/plugin/loader/libs/**" />
+		  <exclude name="**/plugin/loader/obj/**" />
+		  <exclude name="**/res/raw/**" />
+		</fileset>
+	  </copy>
+	  <exec dir="./alt-apk/nightly" executable="${bash-location}">
+		<arg value="fix-nightly.sh"/>
+	  </exec>
+	  <delete> 
+		<fileset dir="./alt-apk/nightly" defaultexcludes="false">
+		  <include name="**/*~"/>		  
+		</fileset>
+	  </delete>
+	  <copy todir="./alt-apk/nightly" overwrite="true">
+		<fileset dir="./alt-apk/override/nightly" />
+	  </copy>
+    </target>
+
+	<target name="classics-copy">
+	  <copy todir="./alt-apk/classics">
+		<fileset dir=".">
+		  <exclude name="**/alt-apk/**" />
+		  <exclude name="**/bin/**" />
+		  <exclude name="**/gen/**" />
+		  <exclude name="**/libs/armeabi/**" />
+		  <exclude name="**/override/**" />
+		  <exclude name="**/plugin/tome/**" />
+		  <exclude name="**/plugin/steam/**" />
+		  <exclude name="**/plugin/sang/**" />
+		  <exclude name="**/plugin/npp/**" />
+		  <exclude name="**/plugin/angband/**" />
+		  <exclude name="**/plugin/angband306/**" />
+		  <exclude name="**/plugin/frogknows/**" />
+		  <exclude name="**/plugin/nightly/**" />
+		  <exclude name="**/plugin/include/*.h" />
+		  <exclude name="**/plugin/loader/libs/**" />
+		  <exclude name="**/plugin/loader/obj/**" />
+		  <exclude name="**/res/raw/**" />
+		</fileset>
+	  </copy>
+	  <exec dir="./alt-apk/classics" executable="${bash-location}">
+		<arg value="fix-classics.sh"/>
+	  </exec>
+	  <delete> 
+		<fileset dir="./alt-apk/classics" defaultexcludes="false">
+		  <include name="**/*~"/>		  
+		</fileset>
+	  </delete>
+	  <copy todir="./alt-apk/classics" overwrite="true">
+		<fileset dir="./alt-apk/override/classics" />
+	  </copy>
+    </target>
+
+	<target name="angband-debug-override">
+	  <copy todir="./" overwrite="true">
+		<fileset dir="./alt-apk/override/angband-debug" />
+	  </copy>
+    </target>
+	<target name="angband-release-override">
+	  <copy todir="./" overwrite="true">
+		<fileset dir="./alt-apk/override/angband-release" />
+	  </copy>
+    </target>
+	<target name="variants-debug-override">
+	  <copy todir="./alt-apk/variants" overwrite="true">
+		<fileset dir="./alt-apk/override/variants-debug" />
+	  </copy>
+    </target>
+	<target name="variants-release-override">
+	  <copy todir="./alt-apk/variants" overwrite="true">
+		<fileset dir="./alt-apk/override/variants-release" />
+	  </copy>
+    </target>
+	<target name="classics-debug-override">
+	  <copy todir="./alt-apk/classics" overwrite="true">
+		<fileset dir="./alt-apk/override/classics-debug" />
+	  </copy>
+    </target>
+	<target name="classics-release-override">
+	  <copy todir="./alt-apk/classics" overwrite="true">
+		<fileset dir="./alt-apk/override/classics-release" />
+	  </copy>
+    </target>
+	<target name="nightly-debug-override">
+	  <copy todir="./alt-apk/nightly" overwrite="true">
+		<fileset dir="./alt-apk/override/nightly-debug" />
+	  </copy>
+    </target>
+
+</project>
