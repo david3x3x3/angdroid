@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AngbandNightly" default="nightly-debug">
+
+    <target name="nightly-release" depends="clean, plugin-src, plugin-resources, angband-javah, plugin-libs, release" />
+    <target name="nightly-debug"   depends="plugin-src, plugin-resources, angband-javah, plugin-libs, debug" />
+
+<!--
+    ************************************************************************
+    *                                                                      *
+    *  Plugins                                                             *
+    *                                                                      *
+    ************************************************************************
+-->
+
+    <target name="plugin-resources">
+	<ant inheritAll="true" antfile="plugin/build.xml" target="plugin-resources">
+	    <property name="plugin.name" value="nightly"/>
+	    <property name="pluginzip.name" value="nightly"/>
+	</ant>
+	</target>
+
+    <target name="angband-javah" depends="compile">
+	<ant inheritAll="true" antfile="plugin/build.xml" target="angband-javah">
+	</ant>
+	</target>
+
+    <target name="plugin-libs" depends="angband-javah">
+	<ant inheritAll="true" antfile="plugin/build.xml" target="plugin-lib">
+	    <property name="plugin.name" value="loader"/>
+	    <property name="pluginlib.name" value="loader-nightly"/>
+	</ant>
+	<ant inheritAll="true" antfile="plugin/build.xml" target="plugin-lib">
+	    <property name="plugin.name" value="nightly"/>
+	    <property name="pluginlib.name" value="nightly"/>
+	</ant>
+    </target>
+
+    <condition property="is.exist.libs">
+	  	<and>
+        	<available file="plugin/nightly/extsrc/lib" type="dir" />
+		</and>
+    </condition>
+
+    <target name="plugin-src">
+	  <ant inheritAll="true" antfile="plugin/build.xml" target="patch-plugin-src">
+	    <property name="plugin.name" value="nightly"/>
+	  </ant>
+	  <exec dir="." executable="${bash-location}">
+	    <arg value="../../find-nightly-src.sh" />
+	  </exec>
+    </target>
+<!--
+    ************************************************************************
+    *                                                                      *
+    *  Clean                                                               *
+    *                                                                      *
+    ************************************************************************
+-->
+
+    <target name="clean-plugins">
+	<ant inheritAll="true" antfile="plugin/build.xml" target="clean">
+	    <property name="plugin.name" value="loader"/>
+	</ant>
+	<ant inheritAll="true" antfile="plugin/build.xml" target="clean">
+	    <property name="plugin.name" value="nightly"/>
+	</ant>
+    </target>
+
+    <target name="clean" depends="clean-plugins">
+		<delete includeemptydirs="true" failonerror="false">
+		  <fileset dir="bin" includes="**/*"/>
+		</delete>
+		<delete includeemptydirs="true" failonerror="false">
+		  <fileset dir="gen" includes="**/*"/>
+		</delete>
+		<delete includeemptydirs="true" failonerror="false">
+		  <fileset dir="libs/armeabi" includes="**/*"/>
+		</delete>
+		<delete file="plugin/include/angdroid.h"/>
+    </target>
+
+
+<!--
+    ************************************************************************
+    *                                                                      *
+    *  Android SDK Setup, etc                                              *
+    *                                                                      *
+    ************************************************************************
+-->
+
+    <target name="obfuscate" depends="nightly-release">
+	<proguard>
+	    -libraryjars ${android.jar}: ${external-libs-folder}
+	    -injars      ${out-classes-location}
+	    -outjars     ${obfuscate-location}/classes.min.jar
+	    -keep public class * extends android.app.Activity
+	    -optimizations !code/simplification/cast
+       </proguard>
+    </target>
+    
+    <path id="android.antlibs">
+        <pathelement path="${sdk-location}/tools/lib/anttasks.jar" />
+        <pathelement path="${sdk-location}/tools/lib/sdklib.jar" />
+        <pathelement path="${sdk-location}/tools/lib/androidprefs.jar" />
+        <pathelement path="${sdk-location}/tools/lib/apkbuilder.jar" />
+        <pathelement path="${sdk-location}/tools/lib/jarutils.jar" />
+    </path>
+
+    <taskdef name="setup"
+        classname="com.android.ant.SetupTask"
+        classpathref="android.antlibs"/>
+
+    <setup/>
+
+</project>

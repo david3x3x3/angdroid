@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AngbandPlugin" default="plugin-lib">
+
+    <condition property="is.exist.jni.header">
+        <available file="angdroid.h" type="file" filepath="plugin/include"/>
+    </condition>
+    <target name="angband-javah" unless="is.exist.jni.header">
+        <javah outputFile="plugin/include/angdroid.h"
+            classpath="${out-classes-location}"
+            bootclasspath="${android-jar}"
+            verbose="true">
+            <class name="org.angdroid.angband.NativeWrapper" />
+        </javah>
+    </target>
+
+    <target name="plugin-lib">
+        <exec executable="sh" 
+	      failonerror="true"
+	      dir="plugin/${plugin.name}">
+	      <arg value="${ndk-location}/ndk-build"/>
+		</exec>
+		<copy file="plugin/${plugin.name}/libs/armeabi/lib${pluginlib.name}.so" 
+	      tofile="libs/armeabi/lib${pluginlib.name}.so"
+	      overwrite="true"/>
+    </target>
+
+    <condition property="is.created.zip.resource">
+            <available file="zip${pluginzip.name}" type="file" filepath="${resource-folder}/raw/"/>
+    </condition>
+
+    <target name="plugin-resources">
+        <delete file="${resource-folder}/raw/zip${pluginzip.name}"/>
+        <delete file="${resource-folder}/raw/crc${pluginzip.name}"/>
+        <zip destfile="${resource-folder}/raw/zip${pluginzip.name}" basedir="plugin/${plugin.name}/extsrc/lib"
+            excludes="**/Makefile **/Makefile.am **/Makefile.in **/delete.me **/*.glade **/*.bmp **/*.png **/*.wav xtra/font/*.* xtra/sound/*.* xtra/help/*.* xtra/graf/*.*" />
+	<exec dir="${resource-folder}" executable="${bash-location}">
+		<arg value="../calc-crc.sh"/>
+		<arg value="${pluginzip.name}"/>
+	</exec>
+    </target>
+
+    <target name="clean">
+		<delete includeemptydirs="true" failonerror="false">
+		  <fileset dir="plugin/${plugin.name}/libs" includes="**/*"/>
+		</delete>
+		<delete includeemptydirs="true" failonerror="false">
+		  <fileset dir="plugin/${plugin.name}/obj" includes="**/*"/>
+		</delete>
+        <delete file="${resource-folder}/raw/zip${pluginzip.name}"/>
+    </target>
+
+	<target name="patch-plugin-src" depends="patch-updates, copy-updates" />
+
+	<target name="get-patch-plugin-src" depends="get-src, patch-plugin-src" />
+
+	<target name="git-patch-plugin-src" depends="git-src, patch-plugin-src" />
+
+	<target name="git-src">
+	  <delete includeemptydirs="true">
+		<fileset dir="plugin/${plugin.name}/extsrc" includes="**/*" defaultexcludes="false"/>
+	  </delete>
+	  <echo>retrieving sources from ${git.url}</echo>
+	  <exec executable="git" 
+			failonerror="true"
+			dir="plugin/${plugin.name}/extsrc">
+	    <arg value="clone" />
+		<arg value="${git.url}"/>
+		<arg value="."/>
+	  </exec>
+	</target>
+
+    <target name="get-src">
+      <delete>
+	    <fileset dir="plugin/${plugin.name}/extsrc/" 
+				 includes="**/*"
+				 excludes="${src.url.file}"/>
+	  </delete>
+      <exec executable="wget" dir="plugin/${plugin.name}/extsrc/" failonerror="true">
+	    <arg value="-c"/>
+	    <arg value="${src.url.base}/${src.url.file}"/>
+	  </exec>        
+      <exec executable="${extract.command}" dir="plugin/${plugin.name}/extsrc/" failonerror="true">
+	    <arg value="${extract.arg1}"/>
+	    <arg value="${extract.arg2}"/>
+	    <arg value="${src.url.file}"/>
+	  </exec>        
+	</target>
+
+    <target name="patch-updates">
+	  <apply executable="patch" dir="${basedir}/plugin/${plugin.name}/extsrc/" failonerror="true">
+	    <arg value="-p1"/>
+	    <arg value="-i"/>
+	    <fileset dir="plugin/${plugin.name}/patch/" 
+				 includes="*.patch"/>
+	  </apply>
+    </target>
+
+	<condition property="is.exist.copy">
+	  <available file="plugin/${plugin.name}/patch/copy" type="dir" />
+	</condition>
+
+    <target name="copy-updates" if="is.exist.copy">
+      <echo>copy-updates...</echo>
+	  <copy todir="plugin/${plugin.name}/extsrc">
+		<fileset dir="plugin/${plugin.name}/patch/copy">
+		  <include name="**/*"/>
+		</fileset>
+	  </copy>
+    </target>
+</project>
