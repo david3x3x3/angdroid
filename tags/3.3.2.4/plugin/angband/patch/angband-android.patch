@@ -1,0 +1,12 @@
+diff -Nru --strip-trailing-cr angband-3.2.0/src/h-basic.h angband-3.2.0-android/src/h-basic.h
+--- angband-3.2.0/src/h-basic.h	2010-12-24 05:13:59.000000000 -0800
++++ angband-3.2.0-android/src/h-basic.h	2010-12-24 10:48:31.450482000 -0800
+@@ -64,7 +64,7 @@
+  * Basically, SET_UID should *only* be set for "Unix" machines.
+  */
+ #if !defined(MACH_O_CARBON) && !defined(WINDOWS) && \
+-		!defined(GAMEBOY) && !defined(NDS)
++		!defined(GAMEBOY) && !defined(NDS) && !defined(USE_AND)
+ # define SET_UID
+ 
+ /* Without autoconf, turn on some things */

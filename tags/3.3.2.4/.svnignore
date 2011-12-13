@@ -1,0 +1,11 @@
+build.properties
+.classpath
+.project
+bin
+gen
+res/raw/zip*
+plugin/angband/extsrc/*
+plugin/angband306/extsrc/*
+plugin/tome/extsrc/*
+plugin/sangband/extsrc/*
+plugin/npp/extsrc/*
